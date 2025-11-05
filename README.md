@@ -5,6 +5,7 @@
 
 #### 框架&特性
 
+- JDK 17+
 - SpringBoot 3.5.6
 - SpringMVC
 - MyBatis/MyBatis Plus 持久层框架
