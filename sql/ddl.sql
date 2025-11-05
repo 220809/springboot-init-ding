@@ -1,6 +1,8 @@
 # 创建数据库
+# todo 修改为你自己的数据库名
 create database if not exists your_db;
 # 使用数据库
+# todo 修改为你自己的数据库名
 use your_db;
 # 创建用户表
 create table if not exists user

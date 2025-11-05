@@ -1,3 +1,4 @@
+# todo 修改为你自己的数据库名
 INSERT INTO your_db.user (username, user_account, gender, user_role, password, deleted) VALUES
                                                                                                  ('管理员', 'admin', 1, 1, 'admin123', 0),
                                                                                                  ('张三', 'zhangsan', 1, 0, 'password123', 0),

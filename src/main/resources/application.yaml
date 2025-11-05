@@ -1,16 +1,26 @@
 spring:
   application:
-   name: ding-api-bd
+    # todo 更换为自己的项目名
+    name: springboot-init-ding
   profiles:
+    # todo 多环境配置, 若配置注意提供相应的 application-xx.yaml 文件
     active: dev
   session:
     timeout: 3600
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # todo 更换为自己的 MySQL 数据库连接 url/username/password
+    url: jdbc:mysql://localhost:3306/your_db
+    username: username
+    password: password
 server:
+  # todo 更换为自己机器可用端口
   port: 9090
   servlet:
     context-path: /api
 mybatis-plus:
   configuration:
+    # 开启 Mybatis SQL 日志
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 # springdoc-openapi项目配置
@@ -25,7 +35,7 @@ springdoc:
   group-configs:
     - group: 'default'
       paths-to-match: '/**'
-      packages-to-scan: com.dingzk.dingapi.controller
+      packages-to-scan: com.dingzk.springbootinit.controller
 
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
