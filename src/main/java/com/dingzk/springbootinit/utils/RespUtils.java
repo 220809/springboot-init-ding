@@ -1,6 +1,9 @@
-package com.dingzk.springbootinit.common;
+package com.dingzk.springbootinit.utils;
 
-public final class ResUtils {
+import com.dingzk.springbootinit.common.BaseResponse;
+import com.dingzk.springbootinit.common.ErrorCode;
+
+public final class RespUtils {
 
     public static <T> BaseResponse<T> success(T data) {
         return new BaseResponse<>(200, data, "ok");

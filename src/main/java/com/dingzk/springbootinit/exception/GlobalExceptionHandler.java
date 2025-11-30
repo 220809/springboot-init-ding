@@ -2,7 +2,7 @@ package com.dingzk.springbootinit.exception;
 
 import com.dingzk.springbootinit.common.BaseResponse;
 import com.dingzk.springbootinit.common.ErrorCode;
-import com.dingzk.springbootinit.common.ResUtils;
+import com.dingzk.springbootinit.utils.RespUtils;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.FieldError;
@@ -18,13 +18,13 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(exception = {BusinessException.class})
     public BaseResponse<?> handleBusinessException(BusinessException e) {
         log.error("BusinessException: {}", e.getMessage());
-        return ResUtils.error(e.getCode(), e.getMessage());
+        return RespUtils.error(e.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(exception = {RuntimeException.class})
     public BaseResponse<?> handleRuntimeException(RuntimeException e) {
         log.error("RuntimeException: {}", e.getMessage());
-        return ResUtils.error(ErrorCode.SYSTEM_ERROR);
+        return RespUtils.error(ErrorCode.SYSTEM_ERROR);
     }
 
     @ExceptionHandler(exception = MethodArgumentNotValidException.class)
@@ -32,6 +32,6 @@ public class GlobalExceptionHandler {
         FieldError fieldError = (FieldError) e.getBindingResult().getAllErrors().get(0);
         String message = String.format("%s: %s", fieldError.getField(), fieldError.getDefaultMessage());
         log.error("Validation Error: {}", message);
-        return ResUtils.error(ErrorCode.BAD_PARAM, message);
+        return RespUtils.error(ErrorCode.BAD_PARAM, message);
     }
 }

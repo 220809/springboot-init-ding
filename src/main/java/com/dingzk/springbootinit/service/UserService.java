@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import static com.dingzk.springbootinit.constant.UserConstant.USER_LOGIN_STATE;
+
 /**
 * @author ding
 * @description 针对表【user(用户)】的数据库操作Service
@@ -41,10 +43,10 @@ public interface UserService extends IService<User> {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession();
         if (loginUser != null) {
-            session.setAttribute("login_user", loginUser);
+            session.setAttribute(USER_LOGIN_STATE, loginUser);
             return;
         }
-        session.removeAttribute("login_user");
+        session.removeAttribute(USER_LOGIN_STATE);
     }
 
     /**
@@ -54,6 +56,6 @@ public interface UserService extends IService<User> {
     default User getLoginUser() {
         ServletRequestAttributes attr = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpSession session = attr.getRequest().getSession();
-        return (User) session.getAttribute("login_user");
+        return (User) session.getAttribute(USER_LOGIN_STATE);
     }
 }

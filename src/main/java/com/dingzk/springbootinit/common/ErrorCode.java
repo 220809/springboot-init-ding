@@ -11,7 +11,8 @@ public enum ErrorCode {
     NO_AUTH(40101, "无权限"),
     FORBIDDEN(40300, "禁止访问"),
     NOT_FOUND(40400, "数据不存在"),
-    SYSTEM_ERROR(50000, "系统错误");
+    SYSTEM_ERROR(50000, "系统错误"),
+    OPERATION_ERROR(50001, "操作错误");
 
     private final int code;
     private final String message;

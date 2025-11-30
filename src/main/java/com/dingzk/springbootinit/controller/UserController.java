@@ -2,11 +2,11 @@ package com.dingzk.springbootinit.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
-import com.dingzk.springbootinit.annotation.Authority;
+import com.dingzk.springbootinit.annotation.CheckPermission;
 import com.dingzk.springbootinit.common.BaseResponse;
 import com.dingzk.springbootinit.common.ErrorCode;
 import com.dingzk.springbootinit.common.PageVo;
-import com.dingzk.springbootinit.common.ResUtils;
+import com.dingzk.springbootinit.constant.UserConstant;
 import com.dingzk.springbootinit.converter.UserConverter;
 import com.dingzk.springbootinit.exception.BusinessException;
 import com.dingzk.springbootinit.model.dto.user.UserLoginRequest;
@@ -15,6 +15,7 @@ import com.dingzk.springbootinit.model.dto.user.UserUpdateRequest;
 import com.dingzk.springbootinit.model.entity.User;
 import com.dingzk.springbootinit.model.vo.UserVo;
 import com.dingzk.springbootinit.service.UserService;
+import com.dingzk.springbootinit.utils.RespUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
@@ -47,7 +48,7 @@ public class UserController {
         }
         User userDo = UserConverter.convertToUserDo(registerRequest);
         long result = userService.userRegister(userDo);
-        return ResUtils.success(result);
+        return RespUtils.success(result);
     }
 
     @Operation(summary = "用户登录")
@@ -58,7 +59,7 @@ public class UserController {
         }
         User userDo = UserConverter.convertToUserDo(loginRequest);
         long result = userService.userLogin(userDo);
-        return ResUtils.success(result);
+        return RespUtils.success(result);
     }
 
     @Operation(summary = "获取登录用户")
@@ -69,7 +70,7 @@ public class UserController {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         UserVo userVo = UserConverter.convertToUserVo(loginUser);
-        return ResUtils.success(userVo);
+        return RespUtils.success(userVo);
     }
 
     @Operation(summary = "退出登录")
@@ -80,7 +81,7 @@ public class UserController {
             throw new BusinessException(ErrorCode.NOT_LOGIN);
         }
         userService.saveUserLoginState(null);
-        return ResUtils.success(true);
+        return RespUtils.success(true);
     }
 
     // region 管理员接口
@@ -88,7 +89,7 @@ public class UserController {
     @Parameters({
             @Parameter(name = "id", required = true)
     })
-    @Authority(role = 1)
+    @CheckPermission(allow = UserConstant.ROLE_ADMIN)
     @GetMapping("/get")
     public BaseResponse<UserVo> getUserById(Long id) {
         if (id == null) {
@@ -99,11 +100,11 @@ public class UserController {
             throw new BusinessException(ErrorCode.NOT_FOUND, "用户不存在");
         }
         UserVo userVo = UserConverter.convertToUserVo(user);
-        return ResUtils.success(userVo);
+        return RespUtils.success(userVo);
     }
 
     @Operation(summary = "根据id删除用户")
-    @Authority(role = 1)
+    @CheckPermission(allow = UserConstant.ROLE_ADMIN)
     @PostMapping("/delete")
     public BaseResponse<Boolean> deleteUserById(Long id) {
         if (id == null) {
@@ -114,16 +115,16 @@ public class UserController {
             throw new BusinessException(ErrorCode.NO_AUTH, "禁止删除当前登录用户");
         }
         boolean result = userService.removeById(id);
-        return ResUtils.success(result);
+        return RespUtils.success(result);
     }
 
     @Operation(summary = "查询用户")
-    @Authority(role = 1)
+    @CheckPermission(allow = UserConstant.ROLE_ADMIN)
     @GetMapping("/list")
     public BaseResponse<List<UserVo>> listUsers() {
         List<User> userList = userService.list();
         List<UserVo> userVos = UserConverter.convertToUserVoList(userList);
-        return ResUtils.success(userVos);
+        return RespUtils.success(userVos);
     }
 
     @Operation(summary = "分页查询用户")
@@ -131,18 +132,18 @@ public class UserController {
             @Parameter(name = "page", description = "页数"),
             @Parameter(name = "pageSize", description = "每页条数")
     })
-    @Authority(role = 1)
+    @CheckPermission(allow = UserConstant.ROLE_ADMIN)
     @GetMapping("/list/page")
     public BaseResponse<PageVo<UserVo>> pageListUsers(int page, int pageSize) {
         Page<User> userPage = userService.page(Page.of(page, pageSize));
         Page<UserVo> userVoPage = new PageDTO<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
         List<UserVo> userVos = UserConverter.convertToUserVoList(userPage.getRecords());
         userVoPage.setRecords(userVos);
-        return ResUtils.success(PageVo.fromPage(userVoPage));
+        return RespUtils.success(PageVo.fromPage(userVoPage));
     }
 
     @Operation(summary = "修改用户")
-    @Authority(role = 1)
+    @CheckPermission(allow = UserConstant.ROLE_ADMIN)
     @PostMapping("/update")
     public BaseResponse<Boolean> updateUser(@RequestBody @Valid UserUpdateRequest updateRequest) {
         if (updateRequest == null) {
@@ -150,7 +151,7 @@ public class UserController {
         }
         User userDo = UserConverter.convertToUserDo(updateRequest);
         boolean result = userService.updateUser(userDo);
-        return ResUtils.success(result);
+        return RespUtils.success(result);
     }
 
     // endregion

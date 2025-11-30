@@ -7,6 +7,6 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Authority {
-    int role() default 0;  // 0 - 普通用户权限，1 - 管理员权限
+public @interface CheckPermission {
+    String allow() default "";  // 0 - 普通用户权限，1 - 管理员权限
 }
